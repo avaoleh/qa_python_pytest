@@ -127,3 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# File project
+/.idea
+*.log
+/venv
+/.pytest_cache
+/__pycache__
+allure_results/
+
+
+
