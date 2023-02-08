@@ -5,6 +5,9 @@ from random import randrange
 from src.generators.player import Player
 from src.generators.item_type_generator import ItemsTypeBuilder
 
+import tables
+
+from db import Session
 
 @pytest.fixture
 def get_number():
@@ -71,3 +74,81 @@ def get_item_type_generator():
     Fixture that initialize generator object and returns it into autotest.
     """
     return ItemsTypeBuilder()
+
+
+@pytest.fixture
+def get_db_session():
+    """
+    Создание сессии для работы с базой данных.
+    Пожалуйста, обратите внимание, что мы в любом случае закрываем нашу сессию.
+    Creating of database session and return it into our autotest.
+    Please check, that in any case, we close our db session.
+    """
+    session = Session()
+    try:
+        yield session
+    finally:
+        session.close()
+
+
+def delete_test_data(session, table, filter_data):
+    """
+    Функция для удаления данных из базы.
+    Example of function for delete test data from database.
+    """
+    session.query(table).filter(filter_data).delete()
+    session.commit()
+
+
+def add_method(session, item):
+    """
+    Функция для добавления данных в базу.
+    Example of function for add test data from database.
+    """
+    session.add(item)
+    session.commit()
+
+
+@pytest.fixture
+def generate_item_type(
+        get_db_session,
+        get_item_type_generator,
+        get_add_method,
+        get_delete_method
+):
+    """
+    Пример фикстуры которая использует другие фикстуры. С помощью этого примера
+    мы можем подготовить себе тестовые данные в базе, передать их в тест, а
+    уже после выполнения удалить.
+    Example of fixture that uses another fixtures inside itself.
+    Using that example we can create test data, return it into autotest and
+    after test execution delete all from database.
+    """
+    item = tables.ItemType(**get_item_type_generator.build())
+    get_add_method(get_db_session, item)
+    yield item
+    get_delete_method(
+        get_db_session,
+        tables.ItemType,
+        (tables.ItemType.item_id == item.item_id)
+    )
+
+
+@pytest.fixture
+def get_add_method():
+    """
+    Пример фикстуры которая передаёт функцию для добавления данных в базу
+    как объект в тест.
+    Example of fixture, that returns add method as object into our tests.
+    """
+    return add_method
+
+
+@pytest.fixture
+def get_delete_method():
+    """
+    Пример фикстуры которая передаёт функцию для удаления данных в базу
+    как объект в тест.
+    Example of fixture, that returns delete method as object into our tests.
+    """
+    return delete_test_data

@@ -23,3 +23,21 @@ computer = {
         }]
     }
 }
+
+"""
+    Database query examples
+"""
+
+# from db import session
+# import tables
+#
+# result = session.query(
+#     tables.Films.film_id, tables.Films.title
+# ).filter(
+#     tables.Films.film_id > 100,
+#     tables.Films.film_id < 150
+# ).all()
+#
+# film_ids = session.query(
+#     tables.Films.film_id
+# ).order_by(tables.Films.film_id).all()

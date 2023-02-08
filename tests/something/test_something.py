@@ -5,6 +5,9 @@ from src.generators.player_localization import PlayerLocalization
 from src.enums.user_enums import Statuses
 from src.baseclasses.response import Response
 
+import tables
+
+
 @pytest.mark.parametrize("status", Statuses.list())
 def test_generator_changing(status, get_player_generator):
     """
@@ -56,3 +59,56 @@ def test_updating_localization_in_generator(
         PlayerLocalization(loc).set_number(15).build()
     ).build()
     print(object_to_send)
+
+
+def test_get_data_films(get_db_session):
+    """
+    Получение сессии базы данных и использование её для того, чтобы достать
+    нужную информацию.
+    Getting database session. In the test, we get info from DB using the
+    session.
+    """
+    data = get_db_session.query(tables.Films).first()
+    print(data.film_id)
+
+
+def test_try_to_delete_something(get_delete_method, get_db_session):
+    """
+    Пример того, как использовать удаление в тесте, когда мы не знаем ID.
+    Просто получаем фикстуру которая умеет это делать и удаляем.
+    Если тест упадёт раньше, то до этой строки кода мы не дойдём, так как
+    удалять нет чего, если же мы дошли, то удалять есть что :).
+    Example of case, when we know nothing about id that should be deleted from
+    DB after test execution. So in that case we just paste our method at the end
+    If our case fails we don't have to delete anything, if not
+    our code will do what it has to do :)
+    """
+    # some code
+    get_delete_method(get_db_session, tables.ItemType, (
+            tables.ItemType.item_id == 3)
+                      )
+
+
+def test_try_to_add_testdata(
+        get_db_session, get_add_method, get_item_type_generator
+):
+    """
+    Добавление в базу тестовых данных в самом тесте, плохой пример но может
+    пригодится. Лучше используйте фикстуры.
+    Adding test data into database in our test. It is very bad example.
+    Please don't do like this.
+    """
+    item = tables.ItemType(**get_item_type_generator.build())
+    get_add_method(get_db_session, item)
+    print(item.item_id)
+
+
+def test_try_to_add_testdata_and_delete_after_test(generate_item_type):
+    """
+    Пример идеального флоу, когда мы создаём и удаляем после себя данные в базе
+    тем самым оставляя тест чистым.
+    PS: Смотрите фикстуру
+    Example of case, when we create and delete test data in our fixture.
+    PS: Check fixtures.
+    """
+    print(generate_item_type.item_id)
