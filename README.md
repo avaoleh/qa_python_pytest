@@ -1,5 +1,10 @@
 # Pytest lessons
 
+.. image:: https://github.com/pytest-dev/pytest/raw/main/doc/en/img/pytest_logo_curves.svg
+   :target: https://docs.pytest.org/en/stable/
+   :align: center
+   :height: 200
+   :alt: pytest
 
 ## Short preview
 
