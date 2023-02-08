@@ -1,7 +1,9 @@
 import pytest
 
-
 from random import randrange
+
+from src.generators.player import Player
+from src.generators.item_type_generator import ItemsTypeBuilder
 
 
 @pytest.fixture
@@ -49,3 +51,23 @@ def make_number():
     number = randrange(1, 1000, 5)
     yield number
     print(f"Number at home {number}")
+
+
+@pytest.fixture
+def get_player_generator():
+    """
+    Пример фикстуры для инициализации объекта генератора и передачу его в
+    тест.
+    Fixture that initialize generator object and returns it into autotest.
+    """
+    return Player()
+
+
+@pytest.fixture
+def get_item_type_generator():
+    """
+    Пример фикстуры для инициализации объекта генератора и передачу его в
+    тест.
+    Fixture that initialize generator object and returns it into autotest.
+    """
+    return ItemsTypeBuilder()
