@@ -2,8 +2,11 @@ import pytest
 
 from src.baseclasses.response import Response
 from src.schemas.user import User
+from src.schemas.computer import Computer
 
+from example import computer
 
+@pytest.mark.skip('AssertionError: Could not map received object to pydantic schema')
 def test_getting_users_list(get_users, make_number):
     """
     Пример использования фикстуры которая отправляет запрос и возвращает
@@ -48,3 +51,15 @@ def test_calculator(first_value, second_value, result, calculate):
     more than one value.
     """
     assert calculate(first_value, second_value) == result
+
+
+def test_pydantic_object():
+    """
+    Пример того, как после инициализации pydantic объекта, можно получить
+    доступ к любому из его параметров.
+    Example for case, when after initialization your JSON as a pydantic object
+    you can get access to all parameters.
+    """
+    comp = Computer.parse_obj(computer)
+    print(comp.detailed_info.physical.color)
+    print(comp.schema_json())

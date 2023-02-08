@@ -134,7 +134,7 @@ dmypy.json
 /venv
 /.pytest_cache
 /__pycache__
-allure_results/
+/allure_results/*
 
 
 
