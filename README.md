@@ -4,9 +4,10 @@
 
 The project will be as cookbook to python automation and testing with pytest.
 
-## Write api automation tests eazy
+## Setup
+To enjoy the automated tests, develop the framework or adapt it to your own purposes, just download the project or clone repository. You need to install packages using pip according to requirements.txt file. Run the command below in terminal:
 
-Check the automation framework PyCamel based on pytest and pydantic that will save a lot of your code and nerves
+pip install -r requirements.txt
 
 ## Run project tests:
 pytest -s -v test/ --alluredir=allure_results
